@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Agriculture AI Dashboard</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: #667eea;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 48px rgba(0,0,0,0.15);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .card-icon {
+            font-size: 2em;
+            margin-right: 15px;
+        }
+
+        .card-title {
+            font-size: 1.3em;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .sensor-data {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .sensor-item {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 15px;
+            border-radius: 10px;
+            color: white;
+        }
+
+        .sensor-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+            margin-bottom: 5px;
+        }
+
+        .sensor-value {
+            font-size: 1.8em;
+            font-weight: bold;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .status-healthy { background-color: #10b981; }
+        .status-moderate { background-color: #f59e0b; }
+        .status-stressed { background-color: #ef4444; }
+
+        .alert-box {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+
+        .alert-critical {
+            background: #fee2e2;
+            border-left-color: #ef4444;
+        }
+
+        .recommendation-box {
+            background: #dbeafe;
+            border-left: 4px solid #3b82f6;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+
+        .metric-large {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .metric-value {
+            font-size: 3em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .metric-label {
+            font-size: 1em;
+            color: #666;
+            margin-top: 10px;
+        }
+
+        .chart-container {
+            margin-top: 20px;
+            height: 300px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 30px;
+            background: #e5e7eb;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .timestamp {
+            text-align: right;
+            color: #999;
+            font-size: 0.9em;
+            margin-top: 15px;
+        }
+
+        .action-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            margin-top: 15px;
+        }
+
+        .action-button:hover {
+            transform: scale(1.05);
+        }
+
+        .anomaly-list {
+            list-style: none;
+            margin-top: 15px;
+        }
+
+        .anomaly-item {
+            background: #fef2f2;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border-left: 3px solid #ef4444;
+        }
+
+        .anomaly-time {
+            font-size: 0.85em;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🌾 Smart Agriculture AI Dashboard</h1>
+            <p class="subtitle">Real-time monitoring and AI-powered decision support system</p>
+        </header>
+
+        <div class="dashboard-grid">
+            <!-- Real-time Sensor Data -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-icon">📊</span>
+                    <h2 class="card-title">Live Sensor Data</h2>
+                </div>
+                <div class="sensor-data">
+                    <div class="sensor-item">
+                        <div class="sensor-label">Soil Moisture</div>
+                        <div class="sensor-value" id="moisture">--</div>
+                    </div>
+                    <div class="sensor-item">
+                        <div class="sensor-label">Temperature</div>
+                        <div class="sensor-value" id="temperature">--</div>
+                    </div>
+                    <div class="sensor-item">
+                        <div class="sensor-label">Humidity</div>
+                        <div class="sensor-value" id="humidity">--</div>
+                    </div>
+                    <div class="sensor-item">
+                        <div class="sensor-label">Light Intensity</div>
+                        <div class="sensor-value" id="light">--</div>
+                    </div>
+                </div>
+                <div class="timestamp" id="sensorTimestamp">Last updated: --</div>
+            </div>
+
+            <!-- Irrigation Prediction -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-icon">💧</span>
+                    <h2 class="card-title">Irrigation Prediction</h2>
+                </div>
+                <div class="metric-large">
+                    <div class="metric-value" id="irrigationAmount">--</div>
+                    <div class="metric-label">Liters Recommended</div>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="irrigationProgress" style="width: 0%">0%</div>
+                </div>
+                <div class="recommendation-box" id="irrigationRecommendation">
+                    Analyzing optimal irrigation requirements...
+                </div>
+            </div>
+
+            <!-- Crop Health Classification -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-icon">🌱</span>
+                    <h2 class="card-title">Crop Health Status</h2>
+                </div>
+                <div class="metric-large">
+                    <div id="healthStatus">
+                        <span class="status-indicator status-healthy"></span>
+                        <span style="font-size: 1.5em; color: #10b981;" id="healthLabel">Analyzing...</span>
+                    </div>
+                </div>
+                <div class="chart-container" id="healthChart"></div>
+                <div class="recommendation-box" id="healthRecommendation">
+                    Health assessment in progress...
+                </div>
+            </div>
+
+            <!-- Yield Prediction -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-icon">📈</span>
+                    <h2 class="card-title">Yield Prediction</h2>
+                </div>
+                <div class="metric-large">
+                    <div class="metric-value" id="yieldAmount">--</div>
+                    <div class="metric-label">Kg per Hectare (Estimated)</div>
+                </div>
+                <div class="recommendation-box">
+                    <strong>Optimal Harvest Date:</strong> <span id="harvestDate">Calculating...</span>
+                </div>
+                <div class="chart-container" id="yieldChart"></div>
+            </div>
+
+            <!-- Anomaly Detection -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-icon">⚠️</span>
+                    <h2 class="card-title">Anomaly Detection</h2>
+                </div>
+                <div id="anomalyStatus" style="margin-bottom: 15px;">
+                    <strong>System Status:</strong> <span id="systemStatus">Monitoring...</span>
+                </div>
+                <ul class="anomaly-list" id="anomalyList">
+                    <li style="text-align: center; color: #666;">No anomalies detected</li>
+                </ul>
+            </div>
+
+            <!-- Active Alerts -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-icon">🔔</span>
+                    <h2 class="card-title">Active Alerts</h2>
+                </div>
+                <div id="alertsContainer">
+                    <p style="text-align: center; color: #666;">No active alerts</p>
+                </div>
+            </div>
+
+            <!-- Historical Trends -->
+            <div class="card" style="grid-column: span 2;">
+                <div class="card-header">
+                    <span class="card-icon">📉</span>
+                    <h2 class="card-title">Historical Trends (24 Hours)</h2>
+                </div>
+                <div class="chart-container" id="trendsChart" style="height: 400px;"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simulated AI Models and Real-time Data Generation
+        class SmartAgricultureAI {
+            constructor() {
+                this.historicalData = {
+                    moisture: [],
+                    temperature: [],
+                    humidity: [],
+                    light: [],
+                    timestamps: []
+                };
+                this.anomalies = [];
+                this.initializeHistoricalData();
+            }
+
+            initializeHistoricalData() {
+                const now = new Date();
+                for (let i = 24; i >= 0; i--) {
+                    const timestamp = new Date(now - i * 3600000);
+                    this.historicalData.timestamps.push(timestamp);
+                    this.historicalData.moisture.push(this.generateSensorValue(30, 60, i));
+                    this.historicalData.temperature.push(this.generateSensorValue(20, 32, i));
+                    this.historicalData.humidity.push(this.generateSensorValue(40, 80, i));
+                    this.historicalData.light.push(this.generateSensorValue(200, 800, i));
+                }
+            }
+
+            generateSensorValue(min, max, timeOffset) {
+                const base = min + (max - min) * Math.random();
+                const dailyPattern = Math.sin((timeOffset / 24) * Math.PI * 2) * ((max - min) * 0.2);
+                return parseFloat((base + dailyPattern).toFixed(2));
+            }
+
+            getCurrentSensorData() {
+                const moisture = this.generateSensorValue(30, 60, 0);
+                const temperature = this.generateSensorValue(20, 32, 0);
+                const humidity = this.generateSensorValue(40, 80, 0);
+                const light = this.generateSensorValue(200, 800, 0);
+
+                // Update historical data
+                this.historicalData.timestamps.push(new Date());
+                this.historicalData.moisture.push(moisture);
+                this.historicalData.temperature.push(temperature);
+                this.historicalData.humidity.push(humidity);
+                this.historicalData.light.push(light);
+
+                // Keep only last 25 data points
+                if (this.historicalData.timestamps.length > 25) {
+                    Object.keys(this.historicalData).forEach(key => {
+                        this.historicalData[key].shift();
+                    });
+                }
+
+                return { moisture, temperature, humidity, light };
+            }
+
+            // 1. Irrigation Prediction Model (Regression)
+            predictIrrigation(moisture, temperature, humidity) {
+                // Simulated regression model
+                const moistureWeight = -0.8;
+                const tempWeight = 0.3;
+                const humidityWeight = -0.2;
+                const baseline = 50;
+
+                const prediction = baseline + 
+                    (moistureWeight * (moisture - 45)) + 
+                    (tempWeight * (temperature - 25)) + 
+                    (humidityWeight * (humidity - 60));
+
+                const irrigation = Math.max(0, Math.min(100, prediction));
+                
+                let recommendation = '';
+                if (irrigation > 70) {
+                    recommendation = '🚨 High irrigation needed! Soil moisture is low. Irrigate immediately.';
+                } else if (irrigation > 40) {
+                    recommendation = '⚡ Moderate irrigation recommended within the next 6-12 hours.';
+                } else {
+                    recommendation = '✅ Soil moisture levels are optimal. No immediate irrigation needed.';
+                }
+
+                return {
+                    amount: parseFloat(irrigation.toFixed(1)),
+                    percentage: Math.round((irrigation / 100) * 100),
+                    recommendation
+                };
+            }
+
+            // 2. Crop Health Classification Model
+            classifyCropHealth(moisture, temperature, humidity, light) {
+                // Simulated classification model
+                let healthScore = 100;
+
+                // Moisture stress
+                if (moisture < 35) healthScore -= 30;
+                else if (moisture < 40) healthScore -= 15;
+                else if (moisture > 55) healthScore -= 10;
+
+                // Temperature stress
+                if (temperature > 30) healthScore -= 20;
+                else if (temperature < 22) healthScore -= 15;
+
+                // Humidity stress
+                if (humidity < 45) healthScore -= 10;
+                else if (humidity > 75) healthScore -= 15;
+
+                // Light stress
+                if (light < 300) healthScore -= 15;
+
+                let status, statusClass, recommendation;
+                if (healthScore >= 75) {
+                    status = 'Healthy';
+                    statusClass = 'status-healthy';
+                    recommendation = '✅ Crops are in excellent condition. Continue current management practices.';
+                } else if (healthScore >= 50) {
+                    status = 'Moderate Stress';
+                    statusClass = 'status-moderate';
+                    recommendation = '⚠️ Crops showing moderate stress. Monitor closely and adjust irrigation/nutrition.';
+                } else {
+                    status = 'High Stress';
+                    statusClass = 'status-stressed';
+                    recommendation = '🚨 Crops under high stress! Immediate intervention required.';
+                }
+
+                return {
+                    status,
+                    statusClass,
+                    score: healthScore,
+                    recommendation,
+                    factors: {
+                        moisture: moisture > 40 && moisture < 55 ? 'Good' : 'Stress',
+                        temperature: temperature > 22 && temperature < 30 ? 'Good' : 'Stress',
+                        humidity: humidity > 45 && humidity < 75 ? 'Good' : 'Stress',
+                        light: light > 300 ? 'Good' : 'Stress'
+                    }
+                };
+            }
+
+            // 3. Yield Prediction Model (Time-series forecasting)
+            predictYield(historicalMoisture, historicalTemp) {
+                // Simulated time-series model
+                const avgMoisture = historicalMoisture.reduce((a, b) => a + b, 0) / historicalMoisture.length;
+                const avgTemp = historicalTemp.reduce((a, b) => a + b, 0) / historicalTemp.length;
+
+                const baseYield = 5000; // kg per hectare
+                const moistureFactor = (avgMoisture - 30) / 30;
+                const tempFactor = (28 - avgTemp) / 10;
+
+                const predictedYield = baseYield * (1 + moistureFactor * 0.3 + tempFactor * 0.2);
+                
+                // Calculate optimal harvest date (simplified)
+                const daysToHarvest = Math.round(60 + (avgTemp - 25) * -2);
+                const harvestDate = new Date();
+                harvestDate.setDate(harvestDate.getDate() + daysToHarvest);
+
+                return {
+                    yield: Math.round(predictedYield),
+                    harvestDate: harvestDate.toLocaleDateString('en-US', { 
+                        year: 'numeric', 
+                        month: 'long', 
+                        day: 'numeric' 
+                    }),
+                    confidence: 85 + Math.random() * 10
+                };
+            }
+
+            // 4. Anomaly Detection Model
+            detectAnomalies(currentData) {
+                const anomalies = [];
+
+                // Sudden moisture loss
+                if (this.historicalData.moisture.length > 2) {
+                    const prevMoisture = this.historicalData.moisture[this.historicalData.moisture.length - 2];
+                    if (prevMoisture - currentData.moisture > 10) {
+                        anomalies.push({
+                            type: 'Sudden Moisture Loss',
+                            severity: 'Critical',
+                            message: `Soil moisture dropped from ${prevMoisture.toFixed(1)}% to ${currentData.moisture.toFixed(1)}%`,
+                            time: new Date().toLocaleTimeString()
+                        });
+                    }
+                }
+
+                // Extreme temperature
+                if (currentData.temperature > 35) {
+                    anomalies.push({
+                        type: 'Extreme Temperature',
+                        severity: 'Warning',
+                        message: `Temperature reached ${currentData.temperature.toFixed(1)}°C - heat stress risk`,
+                        time: new Date().toLocaleTimeString()
+                    });
+                }
+
+                // Low light conditions
+                if (currentData.light < 250) {
+                    anomalies.push({
+                        type: 'Low Light Intensity',
+                        severity: 'Info',
+                        message: `Light intensity at ${currentData.light.toFixed(0)} lux - may affect photosynthesis`,
+                        time: new Date().toLocaleTimeString()
+                    });
+                }
+
+                // Humidity extremes
+                if (currentData.humidity > 85 || currentData.humidity < 35) {
+                    anomalies.push({
+                        type: 'Humidity Extreme',
+                        severity: 'Warning',
+                        message: `Humidity at ${currentData.humidity.toFixed(1)}% - disease risk increased`,
+                        time: new Date().toLocaleTimeString()
+                    });
+                }
+
+                return anomalies;
+            }
+        }
+
+        // Initialize AI System
+        const ai = new SmartAgricultureAI();
+
+        // Update Dashboard
+        function updateDashboard() {
+            const sensorData = ai.getCurrentSensorData();
+            const currentTime = new Date().toLocaleTimeString();
+
+            // Update sensor displays
+            document.getElementById('moisture').textContent = sensorData.moisture.toFixed(1) + '%';
+            document.getElementById('temperature').textContent = sensorData.temperature.toFixed(1) + '°C';
+            document.getElementById('humidity').textContent = sensorData.humidity.toFixed(1) + '%';
+            document.getElementById('light').textContent = sensorData.light.toFixed(0) + ' lux';
+            document.getElementById('sensorTimestamp').textContent = 'Last updated: ' + currentTime;
+
+            // Irrigation Prediction
+            const irrigation = ai.predictIrrigation(sensorData.moisture, sensorData.temperature, sensorData.humidity);
+            document.getElementById('irrigationAmount').textContent = irrigation.amount;
+            document.getElementById('irrigationProgress').style.width = irrigation.percentage + '%';
+            document.getElementById('irrigationProgress').textContent = irrigation.percentage + '%';
+            document.getElementById('irrigationRecommendation').innerHTML = irrigation.recommendation;
+
+            // Crop Health Classification
+            const health = ai.classifyCropHealth(sensorData.moisture, sensorData.temperature, sensorData.humidity, sensorData.light);
+            const healthIndicator = document.querySelector('#healthStatus .status-indicator');
+            healthIndicator.className = 'status-indicator ' + health.statusClass;
+            document.getElementById('healthLabel').textContent = health.status;
+            document.getElementById('healthLabel').style.color = health.statusClass === 'status-healthy' ? '#10b981' : 
+                                                                    health.statusClass === 'status-moderate' ? '#f59e0b' : '#ef4444';
+            document.getElementById('healthRecommendation').innerHTML = health.recommendation;
+
+            // Update health factors chart
+            updateHealthChart(health.factors);
+
+            // Yield Prediction
+            const yieldPrediction = ai.predictYield(ai.historicalData.moisture, ai.historicalData.temperature);
+            document.getElementById('yieldAmount').textContent = yieldPrediction.yield.toLocaleString();
+            document.getElementById('harvestDate').textContent = yieldPrediction.harvestDate;
+            updateYieldChart();
+
+            // Anomaly Detection
+            const anomalies = ai.detectAnomalies(sensorData);
+            if (anomalies.length > 0) {
+                document.getElementById('systemStatus').innerHTML = '<span style="color: #ef4444;">⚠️ Anomalies Detected</span>';
+                const anomalyList = document.getElementById('anomalyList');
+                anomalyList.innerHTML = anomalies.map(a => `
+                    <li class="anomaly-item">
+                        <strong>${a.type}</strong> (${a.severity})<br>
+                        ${a.message}<br>
+                        <span class="anomaly-time">${a.time}</span>
+                    </li>
+                `).join('');
+
+                // Update alerts
+                const alertsHtml = anomalies.filter(a => a.severity === 'Critical' || a.severity === 'Warning').map(a => `
+                    <div class="alert-box ${a.severity === 'Critical' ? 'alert-critical' : ''}">
+                        <strong>${a.type}</strong><br>
+                        ${a.message}
+                    </div>
+                `).join('');
+                document.getElementById('alertsContainer').innerHTML = alertsHtml || '<p style="text-align: center; color: #666;">No active alerts</p>';
+            } else {
+                document.getElementById('systemStatus').innerHTML = '<span style="color: #10b981;">✅ All Systems Normal</span>';
+                document.getElementById('anomalyList').innerHTML = '<li style="text-align: center; color: #666;">No anomalies detected</li>';
+                document.getElementById('alertsContainer').innerHTML = '<p style="text-align: center; color: #666;">No active alerts</p>';
+            }
+
+            // Update trends chart
+            updateTrendsChart();
+        }
+
+        // Chart Updates
+        function updateHealthChart(factors) {
+            const data = [{
+                x: Object.keys(factors),
+                y: Object.values(factors).map(v => v === 'Good' ? 1 : 0),
+                type: 'bar',
+                marker: {
+                    color: Object.values(factors).map(v => v === 'Good' ? '#10b981' : '#ef4444')
+                }
+            }];
+
+            const layout = {
+                margin: { t: 10, b: 40, l: 40, r: 10 },
+                yaxis: { title: '', showticklabels: false, range: [0, 1.2] },
+                xaxis: { title: '' },
+                showlegend: false
+            };
+
+            Plotly.newPlot('healthChart', data, layout, { responsive: true, displayModeBar: false });
+        }
+
+        function updateYieldChart() {
+            const days = Array.from({length: 60}, (_, i) => i + 1);
+            const yieldGrowth = days.map(d => 5000 * (1 - Math.exp(-d/20)));
+
+            const data = [{
+                x: days,
+                y: yieldGrowth,
+                type: 'scatter',
+                mode: 'lines',
+                fill: 'tozeroy',
+                line: { color: '#667eea', width: 3 }
+            }];
+
+            const layout = {
+                margin: { t: 10, b: 40, l: 60, r: 10 },
+                xaxis: { title: 'Days to Harvest' },
+                yaxis: { title: 'Yield (kg/ha)' },
+                showlegend: false
+            };
+
+            Plotly.newPlot('yieldChart', data, layout, { responsive: true, displayModeBar: false });
+        }
+
+        function updateTrendsChart() {
+            const timestamps = ai.historicalData.timestamps.map(t => t.toLocaleTimeString());
+
+            const traces = [
+                {
+                    x: timestamps,
+                    y: ai.historicalData.moisture,
+                    name: 'Moisture (%)',
+                    type: 'scatter',
+                    mode: 'lines+markers',
+                    line: { color: '#3b82f6', width: 2 }
+                },
+                {
+                    x: timestamps,
+                    y: ai.historicalData.temperature,
+                    name: 'Temperature (°C)',
+                    type: 'scatter',
+                    mode: 'lines+markers',
+                    line: { color: '#ef4444', width: 2 },
+                    yaxis: 'y2'
+                },
+                {
+                    x: timestamps,
+                    y: ai.historicalData.humidity,
+                    name: 'Humidity (%)',
+                    type: 'scatter',
+                    mode: 'lines+markers',
+                    line: { color: '#10b981', width: 2 }
+                }
+            ];
+
+            const layout = {
+                margin: { t: 30, b: 60, l: 60, r: 60 },
+                xaxis: { title: 'Time' },
+                yaxis: { title: 'Moisture & Humidity (%)' },
+                yaxis2: {
+                    title: 'Temperature (°C)',
+                    overlaying: 'y',
+                    side: 'right'
+                },
+                showlegend: true,
+                legend: { x: 0, y: 1.15, orientation: 'h' }
+            };
+
+            Plotly.newPlot('trendsChart', traces, layout, { responsive: true, displayModeBar: false });
+        }
+
+        // Initialize and auto-update
+        updateDashboard();
+        setInterval(updateDashboard, 5000); // Update every 5 seconds
+    </script>
+</body>
+</html>
