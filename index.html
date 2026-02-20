@@ -16,9 +16,9 @@
             <ul class="nav-menu">
                 <li><a href="index.html" class="nav-link active">Home</a></li>
                 <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
-                <li><a href="#features" class="nav-link">Features</a></li>
-                <li><a href="#about" class="nav-link">About</a></li>
-                <li><a href="#contact" class="nav-link">Contact</a></li>
+                <li><a href="index.html#features" class="nav-link">Features</a></li>
+                <li><a href="index.html#about" class="nav-link">About</a></li>
+                <li><a href="index.html#contact" class="nav-link">Contact</a></li>
             </ul>
         </div>
     </nav>
@@ -29,11 +29,7 @@
             <h1 class="hero-title">AI-Powered Smart Agriculture</h1>
             <p class="hero-subtitle">Transform your farm with intelligent monitoring, real-time predictions, and data-driven decisions</p>
             <div class="hero-buttons">
-                <a href="dashboard.html" class="btn btn-primary">
-                    <span>Launch Dashboard</span>
-                    <span class="btn-icon">→</span>
-                </a>
-                <a href="#features" class="btn btn-secondary">Learn More</a>
+                <a href="#features" class="btn btn-primary">Learn More</a>
             </div>
             <div class="hero-stats">
                 <div class="stat">
@@ -54,7 +50,7 @@
                 </div>
             </div>
         </div>
-          <div class="hero-visual">
+        <div class="hero-visual">
             <div class="hero-cards-grid">
                 <div class="floating-card card-1">
                     <div class="card-icon">💧</div>
@@ -76,71 +72,43 @@
         </div>
     </section>
 
-    <!-- Features Section -->
-    <section id="features" class="features">
+    <!-- Button Section -->
+    <section id="features" class="button-section">
         <div class="container">
-            <h2 class="section-title">AI-Powered Features</h2>
-            <p class="section-subtitle">Four advanced machine learning models working together for optimal farm management</p>
+            <h2 class="section-title">Explore Our AI Models</h2>
+            <p class="section-subtitle">Click on any model to learn more about its capabilities</p>
             
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">💧</div>
-                    <h3 class="feature-title">Irrigation Prediction</h3>
-                    <p class="feature-description">
-                        Ridge regression model predicts optimal water requirements (0-100 L/m²) based on soil moisture, temperature, humidity, and rainfall patterns.
-                    </p>
-                    <ul class="feature-list">
-                        <li>Real-time water optimization</li>
-                        <li>Weather-adaptive recommendations</li>
-                        <li>Urgency-based alerts (Critical/Moderate/Low)</li>
-                        <li>Historical trend analysis</li>
-                    </ul>
-                    <div class="feature-badge">Regression Model</div>
-                </div>
+            <div class="button-grid">
+                <button class="model-button" data-model="irrigation">
+                    <div class="button-icon">💧</div>
+                    <h3 class="button-title">Irrigation Prediction</h3>
+                    <p class="button-description">Optimal water management using regression analysis</p>
+                </button>
 
-                <div class="feature-card">
-                    <div class="feature-icon">🌱</div>
-                    <h3 class="feature-title">Crop Health Classification</h3>
-                    <p class="feature-description">
-                        Random Forest classifier categorizes crops into three health states with 95%+ accuracy using multi-parameter analysis.
-                    </p>
-                    <ul class="feature-list">
-                        <li>3-class health assessment (Healthy/Moderate/High Stress)</li>
-                        <li>Probability distribution insights</li>
-                        <li>Factor-based diagnostics</li>
-                        <li>Actionable recommendations</li>
-                    </ul>
-                    <div class="feature-badge">Classification</div>
-                </div>
+                <button class="model-button" data-model="health">
+                    <div class="button-icon">🌱</div>
+                    <h3 class="button-title">Crop Health Classification</h3>
+                    <p class="button-description">Multi-class health assessment with 95%+ accuracy</p>
+                </button>
 
-                <div class="feature-card">
-                    <div class="feature-icon">📈</div>
-                    <h3 class="feature-title">Yield Prediction</h3>
-                    <p class="feature-description">
-                        Time-series forecasting estimates crop yield and optimal harvest timing using seasonal environmental data patterns.
-                    </p>
-                    <ul class="feature-list">
-                        <li>Harvest date optimization</li>
-                        <li>Yield estimation (kg/hectare)</li>
-                        <li>Growth trajectory visualization</li>
-                        <li>Confidence metrics</li>
-                    </ul>
-                    <div class="feature-badge">Time-Series</div>
-                </div>
+                <button class="model-button" data-model="yield">
+                    <div class="button-icon">📈</div>
+                    <h3 class="button-title">Yield Prediction</h3>
+                    <p class="button-description">Time-series forecasting for harvest optimization</p>
+                </button>
 
-                <div class="feature-card">
-                    <div class="feature-icon">⚠️</div>
-                    <h3 class="feature-title">Anomaly Detection</h3>
-                    <p class="feature-description">
-                        Rule-based and statistical anomaly detection identifies abnormal conditions before they become critical problems.
-                    </p>
-                    <ul class="feature-list">
-                        <li>Sudden moisture loss detection</li>
-                        <li>Temperature extremes monitoring</li>
-                        <li>Statistical outlier analysis (Z-score)</li>
-                        <li>Multi-severity alerts</li>
-                    </ul>
-                    <div class="feature-badge">Hybrid Detection</div>
+                <button class="model-button" data-model="anomaly">
+                    <div class="button-icon">⚠️</div>
+                    <h3 class="button-title">Anomaly Detection</h3>
+                    <p class="button-description">Real-time monitoring with hybrid detection</p>
+                </button>
+            </div>
+
+            <!-- Modal for Model Details -->
+            <div id="modelModal" class="modal">
+                <div class="modal-content">
+                    <span class="modal-close">&times;</span>
+                    <div id="modalBody"></div>
                 </div>
             </div>
         </div>
@@ -191,7 +159,57 @@
             </div>
         </div>
     </section>
-    
+
+    <!-- Technology Stack -->
+    <section class="tech-stack">
+        <div class="container">
+            <h2 class="section-title">Technology Stack</h2>
+            
+            <div class="tech-categories">
+                <div class="tech-category">
+                    <h3>Machine Learning</h3>
+                    <div class="tech-tags">
+                        <span class="tech-tag">scikit-learn</span>
+                        <span class="tech-tag">NumPy</span>
+                        <span class="tech-tag">Pandas</span>
+                        <span class="tech-tag">Ridge Regression</span>
+                        <span class="tech-tag">Random Forest</span>
+                    </div>
+                </div>
+
+                <div class="tech-category">
+                    <h3>Backend</h3>
+                    <div class="tech-tags">
+                        <span class="tech-tag">Python 3.8+</span>
+                        <span class="tech-tag">Flask</span>
+                        <span class="tech-tag">REST API</span>
+                        <span class="tech-tag">CORS</span>
+                    </div>
+                </div>
+
+                <div class="tech-category">
+                    <h3>Frontend</h3>
+                    <div class="tech-tags">
+                        <span class="tech-tag">HTML5</span>
+                        <span class="tech-tag">CSS3</span>
+                        <span class="tech-tag">JavaScript ES6+</span>
+                        <span class="tech-tag">Plotly.js</span>
+                    </div>
+                </div>
+
+                <div class="tech-category">
+                    <h3>IoT Hardware</h3>
+                    <div class="tech-tags">
+                        <span class="tech-tag">Arduino</span>
+                        <span class="tech-tag">Raspberry Pi</span>
+                        <span class="tech-tag">DHT22</span>
+                        <span class="tech-tag">MQTT</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- About Section -->
     <section id="about" class="about">
         <div class="container">
@@ -233,7 +251,7 @@
     </section>
 
     <!-- CTA Section -->
-     <section class="cta">
+    <section class="cta">
         <div class="container">
             <h2 class="cta-title">Smart Agriculture with AI</h2>
             <p class="cta-subtitle">Discover how our AI-powered system transforms farming practices</p>
@@ -276,12 +294,12 @@
                 <div class="footer-section">
                     <h4>Contact</h4>
                     <ul>
-                        <li>📧 <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="afc6c1c9c0efdcc2cedddbcec8ddc681cec6">shashankrai283@gmail.com</a></li>
+                        <li>📧 <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="afc6c1c9c0efdcc2cedddbcec8ddc681cec6">[email&#160;protected]</a></li>
                         <li>🌐 www.smartagri.ai</li>
-                        <li>📱 +91 7068186904</li>
+                        <li>📱 +1 (555) 123-4567</li>
                     </ul>
                 </div>
             </div>
             
             <div class="footer-bottom">
-                <p>&copy; 2024 Smart Agriculture AI System.
+                <p>&copy; 2024 Smart Agriculture AI System. Built with ❤️ for sustaina

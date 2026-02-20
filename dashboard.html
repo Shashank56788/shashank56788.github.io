@@ -15,7 +15,7 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #bbff00 0%, #96130f 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
         }
@@ -380,7 +380,7 @@
     </div>
 
     <script>
-        
+        // Backend API Configuration
         const BACKEND_URL = 'http://localhost:5000';
         let isBackendConnected = false;
         let historicalData = {
@@ -391,7 +391,7 @@
             timestamps: []
         };
 
-        
+        // Initialize historical data with 24 empty points
         function initializeHistoricalData() {
             const now = new Date();
             for (let i = 24; i >= 0; i--) {
@@ -404,7 +404,7 @@
             }
         }
 
-        
+        // Update historical data with new reading
         function addToHistory(moisture, temperature, humidity, light) {
             historicalData.timestamps.push(new Date());
             historicalData.moisture.push(moisture);
@@ -412,7 +412,7 @@
             historicalData.humidity.push(humidity);
             historicalData.light.push(light);
 
-            
+            // Keep only last 25 data points
             if (historicalData.timestamps.length > 25) {
                 Object.keys(historicalData).forEach(key => {
                     historicalData[key].shift();
@@ -420,7 +420,7 @@
             }
         }
 
-        
+        // Update Dashboard with real backend data
         async function updateDashboard() {
             const statusEl = document.getElementById('connectionStatus');
             
@@ -428,7 +428,7 @@
                 statusEl.textContent = '⏳ Fetching data from backend...';
                 statusEl.style.color = '#f59e0b';
                 
-            
+                // Fetch comprehensive analysis from backend
                 const response = await fetch(`${BACKEND_URL}/api/analyze`);
                 
                 if (!response.ok) {
@@ -438,7 +438,7 @@
                 const data = await response.json();
                 isBackendConnected = true;
                 
-                
+                // Update sensor readings
                 const sensorData = data.sensor_readings;
                 document.getElementById('moisture').textContent = sensorData.moisture.toFixed(1) + '%';
                 document.getElementById('temperature').textContent = sensorData.temperature.toFixed(1) + '°C';
@@ -446,10 +446,10 @@
                 document.getElementById('light').textContent = sensorData.light.toFixed(0) + ' lux';
                 document.getElementById('sensorTimestamp').textContent = 'Last updated: ' + new Date().toLocaleTimeString();
                 
-                
+                // Add to historical data
                 addToHistory(sensorData.moisture, sensorData.temperature, sensorData.humidity, sensorData.light);
                 
-                
+                // Update irrigation prediction
                 const irrigation = data.irrigation;
                 document.getElementById('irrigationAmount').textContent = irrigation.irrigation_liters_per_sqm.toFixed(1);
                 const percentage = Math.round((irrigation.irrigation_liters_per_sqm / 100) * 100);
@@ -457,7 +457,7 @@
                 document.getElementById('irrigationProgress').textContent = percentage + '%';
                 document.getElementById('irrigationRecommendation').innerHTML = irrigation.recommendation;
                 
-                
+                // Update crop health
                 const health = data.crop_health;
                 const healthIndicator = document.querySelector('#healthStatus .status-indicator');
                 const statusClass = health.health_status === 'Healthy' ? 'status-healthy' : 
@@ -467,7 +467,7 @@
                 document.getElementById('healthLabel').style.color = statusClass === 'status-healthy' ? '#10b981' : 
                                                                        statusClass === 'status-moderate' ? '#f59e0b' : '#ef4444';
                 
-                
+                // Create health factors for chart
                 const healthFactors = {
                     moisture: health.probabilities.healthy > 0.7 ? 'Good' : 'Stress',
                     temperature: health.probabilities.healthy > 0.7 ? 'Good' : 'Stress',
@@ -476,7 +476,7 @@
                 };
                 updateHealthChart(healthFactors);
                 
-                
+                // Format recommendations
                 let healthRecommendationHtml = '';
                 if (health.recommendations && health.recommendations.length > 0) {
                     healthRecommendationHtml = health.recommendations.map(r => '• ' + r).join('<br>');
@@ -485,13 +485,13 @@
                 }
                 document.getElementById('healthRecommendation').innerHTML = healthRecommendationHtml;
                 
-                
+                // Update yield prediction
                 const yieldPred = data.yield_prediction;
                 document.getElementById('yieldAmount').textContent = yieldPred.predicted_yield_kg_per_ha.toLocaleString();
                 document.getElementById('harvestDate').textContent = yieldPred.optimal_harvest_date;
                 updateYieldChart(yieldPred);
                 
-                
+                // Update anomalies
                 const anomalies = data.anomalies;
                 if (anomalies && anomalies.length > 0) {
                     document.getElementById('systemStatus').innerHTML = '<span style="color: #ef4444;">⚠️ ' + anomalies.length + ' Anomalies Detected</span>';
@@ -504,7 +504,7 @@
                         </li>
                     `).join('');
                     
-                    
+                    // Update alerts
                     const criticalAnomalies = anomalies.filter(a => a.severity === 'CRITICAL' || a.severity === 'WARNING');
                     if (criticalAnomalies.length > 0) {
                         const alertsHtml = criticalAnomalies.map(a => `
@@ -523,10 +523,10 @@
                     document.getElementById('alertsContainer').innerHTML = '<p style="text-align: center; color: #666;">No active alerts</p>';
                 }
                 
-                
+                // Update trends chart
                 updateTrendsChart();
                 
-                
+                // Update connection status
                 statusEl.textContent = '✅ Connected to Backend';
                 statusEl.style.color = '#10b981';
                 
@@ -536,7 +536,7 @@
                 statusEl.textContent = '❌ Backend Not Connected - Please start backend_server.py';
                 statusEl.style.color = '#ef4444';
                 
-                
+                // Show connection instructions
                 if (!document.getElementById('backendInstructions')) {
                     const instructions = document.createElement('div');
                     instructions.id = 'backendInstructions';
@@ -554,7 +554,7 @@
             }
         }
 
-        
+        // Chart Updates
         function updateHealthChart(factors) {
             const data = [{
                 x: Object.keys(factors),
@@ -652,13 +652,13 @@
             Plotly.newPlot('trendsChart', traces, layout, { responsive: true, displayModeBar: false });
         }
 
-        
+        // Initialize historical data
         initializeHistoricalData();
         
-        
+        // Initial dashboard update - try to connect to backend
         updateDashboard();
         
-        
+        // Manual refresh function for the button
         async function fetchRealSensorData() {
             await updateDashboard();
         }
