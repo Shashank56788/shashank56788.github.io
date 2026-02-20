@@ -1,24 +1,29 @@
+/* ============================================================================
+   Smart Agriculture AI System - Global Styles
+   ============================================================================ */
+
+/* CSS Variables */
 :root {
     /* Colors */
-    --primary-color: #b91f1f;
-    --primary-dark: #cacaca00;
-    --secondary-color: #290baf;
-    --accent-color: #56215c;
+    --primary-color: #667eea;
+    --primary-dark: #5568d3;
+    --secondary-color: #764ba2;
+    --accent-color: #f093fb;
     
-    --success-color: #065037;
+    --success-color: #10b981;
     --warning-color: #f59e0b;
     --danger-color: #ef4444;
     --info-color: #3b82f6;
     
-    --text-primary: #f30909;
+    --text-primary: #1f2937;
     --text-secondary: #6b7280;
     --text-light: #9ca3af;
     
     --bg-primary: #ffffff;
-    --bg-secondary: #ffffff;
+    --bg-secondary: #f9fafb;
     --bg-tertiary: #f3f4f6;
     
-    --border-color: #21bd0ce8;
+    --border-color: #e5e7eb;
     --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
     --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
     --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
@@ -289,9 +294,16 @@ ul {
 
 .hero-visual {
     position: relative;
-    width: 500px;
-    height: 500px;
+    width: 100%;
+    max-width: 650px;
+    height: 450px;
     display: none;
+}
+
+.hero-cards-grid {
+    position: relative;
+    width: 100%;
+    height: 100%;
 }
 
 .floating-card {
@@ -305,37 +317,44 @@ ul {
     align-items: center;
     gap: 1rem;
     animation: float 3s ease-in-out infinite;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.floating-card:hover {
+    transform: translateY(-15px) scale(1.05);
+    box-shadow: 0 25px 35px rgba(0,0,0,0.25);
 }
 
 .floating-card .card-icon {
-    font-size: 2rem;
+    font-size: 2.5rem;
 }
 
 .floating-card .card-text {
     font-weight: 600;
+    font-size: 0.95rem;
 }
 
 .card-1 {
-    top: 10%;
-    left: 10%;
+    top: 5%;
+    left: 0%;
     animation-delay: 0s;
 }
 
 .card-2 {
-    top: 15%;
-    right: 10%;
+    top: 5%;
+    right: 0%;
     animation-delay: 0.5s;
 }
 
 .card-3 {
-    bottom: 25%;
-    left: 5%;
+    bottom: 10%;
+    left: 0%;
     animation-delay: 1s;
 }
 
 .card-4 {
-    bottom: 15%;
-    right: 15%;
+    bottom: 10%;
+    right: 0%;
     animation-delay: 1.5s;
 }
 
@@ -399,7 +418,203 @@ section {
 }
 
 /* ============================================================================
-   Features Section
+   Button Section (Replacing Features)
+   ============================================================================ */
+
+.button-section {
+    background: var(--bg-primary);
+}
+
+.button-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+}
+
+.model-button {
+    background: white;
+    border: 3px solid transparent;
+    border-radius: var(--radius-xl);
+    padding: 2.5rem 2rem;
+    cursor: pointer;
+    transition: all var(--transition-base);
+    box-shadow: var(--shadow-md);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.model-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+    transform: scaleX(0);
+    transition: transform var(--transition-base);
+}
+
+.model-button:hover::before {
+    transform: scaleX(1);
+}
+
+.model-button:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: var(--shadow-xl);
+    border-color: var(--primary-color);
+}
+
+.model-button:active {
+    transform: translateY(-5px) scale(1.01);
+}
+
+.button-icon {
+    font-size: 4rem;
+    margin-bottom: 1.5rem;
+    display: inline-block;
+    transition: transform var(--transition-base);
+}
+
+.model-button:hover .button-icon {
+    transform: scale(1.2) rotate(5deg);
+}
+
+.button-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+}
+
+.button-description {
+    color: var(--text-secondary);
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+    animation: fadeIn 0.3s ease;
+}
+
+.modal.active {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background: white;
+    padding: 3rem;
+    border-radius: var(--radius-2xl);
+    max-width: 700px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    position: relative;
+    animation: slideUp 0.4s ease;
+    box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+}
+
+.modal-close {
+    position: absolute;
+    right: 1.5rem;
+    top: 1.5rem;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: color var(--transition-base);
+    line-height: 1;
+}
+
+.modal-close:hover {
+    color: var(--danger-color);
+}
+
+#modalBody h3 {
+    font-size: 2rem;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+}
+
+#modalBody .modal-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+#modalBody p {
+    color: var(--text-secondary);
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+}
+
+#modalBody ul {
+    list-style: none;
+    margin: 1.5rem 0;
+}
+
+#modalBody ul li {
+    padding: 0.75rem 0;
+    padding-left: 2rem;
+    position: relative;
+    color: var(--text-secondary);
+}
+
+#modalBody ul li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: var(--success-color);
+    font-weight: 700;
+    font-size: 1.2rem;
+}
+
+#modalBody .modal-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+    color: var(--primary-color);
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius-md);
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin-top: 1rem;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* ============================================================================
+   Features Section (Keep for backward compatibility)
    ============================================================================ */
 
 .features {
@@ -994,11 +1209,13 @@ header .subtitle {
     color: var(--text-secondary);
 }
 
-
+/* ============================================================================
+   Responsive Design
+   ============================================================================ */
 
 @media (max-width: 768px) {
     .nav-menu {
-        display: none;
+        display: none; /* Mobile menu would require JS implementation */
     }
     
     .hero {
@@ -1054,7 +1271,9 @@ header .subtitle {
     }
 }
 
-
+/* ============================================================================
+   Utility Classes
+   ============================================================================ */
 
 .text-center { text-align: center; }
 .text-left { text-align: left; }

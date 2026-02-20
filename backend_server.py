@@ -14,10 +14,10 @@ print("System ready!\n")
 
 
 current_sensor_data = {
-    'moisture': 45.0,
-    'temperature': 25.0,
-    'humidity': 65.0,
-    'light': 600.0,
+    'moisture': 78.0,
+    'temperature': 87.0,
+    'humidity': 100.0,
+    'light': 700.0,
     'avg_moisture': 42.0,
     'avg_temperature': 26.5,
     'avg_humidity': 65.0,

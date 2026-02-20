@@ -4,6 +4,122 @@
  */
 
 // ============================================================================
+// Model Details Data
+// ============================================================================
+
+const modelDetails = {
+    irrigation: {
+        icon: '💧',
+        title: 'Irrigation Prediction Model',
+        description: 'Ridge regression model predicts optimal water requirements (0-100 L/m²) based on soil moisture, temperature, humidity, and rainfall patterns.',
+        features: [
+            'Real-time water optimization',
+            'Weather-adaptive recommendations',
+            'Urgency-based alerts (Critical/Moderate/Low)',
+            'Historical trend analysis'
+        ],
+        badge: 'Regression Model'
+    },
+    health: {
+        icon: '🌱',
+        title: 'Crop Health Classification Model',
+        description: 'Random Forest classifier categorizes crops into three health states with 95%+ accuracy using multi-parameter analysis.',
+        features: [
+            '3-class health assessment (Healthy/Moderate/High Stress)',
+            'Probability distribution insights',
+            'Factor-based diagnostics',
+            'Actionable recommendations'
+        ],
+        badge: 'Classification'
+    },
+    yield: {
+        icon: '📈',
+        title: 'Yield Prediction Model',
+        description: 'Time-series forecasting estimates crop yield and optimal harvest timing using seasonal environmental data patterns.',
+        features: [
+            'Harvest date optimization',
+            'Yield estimation (kg/hectare)',
+            'Growth trajectory visualization',
+            'Confidence metrics'
+        ],
+        badge: 'Time-Series'
+    },
+    anomaly: {
+        icon: '⚠️',
+        title: 'Anomaly Detection Model',
+        description: 'Rule-based and statistical anomaly detection identifies abnormal conditions before they become critical problems.',
+        features: [
+            'Sudden moisture loss detection',
+            'Temperature extremes monitoring',
+            'Statistical outlier analysis (Z-score)',
+            'Multi-severity alerts'
+        ],
+        badge: 'Hybrid Detection'
+    }
+};
+
+// ============================================================================
+// Modal Functionality
+// ============================================================================
+
+document.addEventListener('DOMContentLoaded', function() {
+    const modal = document.getElementById('modelModal');
+    const modalBody = document.getElementById('modalBody');
+    const closeBtn = document.querySelector('.modal-close');
+    const modelButtons = document.querySelectorAll('.model-button');
+
+    // Open modal when button is clicked
+    modelButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const modelType = this.getAttribute('data-model');
+            const details = modelDetails[modelType];
+
+            if (details) {
+                // Populate modal content
+                modalBody.innerHTML = `
+                    <div class="modal-icon">${details.icon}</div>
+                    <h3>${details.title}</h3>
+                    <p>${details.description}</p>
+                    <h4 style="color: var(--text-primary); margin-top: 2rem; margin-bottom: 1rem;">Key Features:</h4>
+                    <ul>
+                        ${details.features.map(feature => `<li>${feature}</li>`).join('')}
+                    </ul>
+                    <div class="modal-badge">${details.badge}</div>
+                `;
+
+                // Show modal
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        });
+    });
+
+    // Close modal when X is clicked
+    if (closeBtn) {
+        closeBtn.addEventListener('click', function() {
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        });
+    }
+
+    // Close modal when clicking outside
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+    });
+
+    // Close modal with Escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && modal.classList.contains('active')) {
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+    });
+});
+
+// ============================================================================
 // Smooth Scrolling for Navigation Links
 // ============================================================================
 
@@ -480,7 +596,6 @@ if (window.performance && window.performance.timing) {
 
 console.log('%c🌾 Smart Agriculture AI System', 'color: #667eea; font-size: 20px; font-weight: bold;');
 console.log('%cBuilt with ❤️ for sustainable farming', 'color: #764ba2; font-size: 14px;');
-console.log('%cInterested in the tech? Check out our GitHub!', 'color: #10b981; font-size: 12px;');
 
 // ============================================================================
 // Export functions for use in other scripts
