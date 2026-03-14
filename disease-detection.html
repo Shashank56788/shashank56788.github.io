@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Disease Detection - Smart Agriculture AI System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <span class="logo-icon">🌾</span>
+                <span class="logo-text">Smart Agriculture AI</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+                <li><a href="features.html" class="nav-link">Features</a></li>
+                <li><a href="about.html" class="nav-link">About</a></li>
+                <li><a href="disease-detection.html" class="nav-link active">Disease Detection</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="disease-hero">
+        <div class="container">
+            <h1 class="disease-hero-title">🔬 AI-Powered Disease Detection</h1>
+            <p class="disease-hero-subtitle">Identify crop, fruit, and vegetable diseases instantly using computer vision and deep learning</p>
+        </div>
+    </section>
+
+    <!-- Upload Section -->
+    <section class="disease-upload">
+        <div class="container">
+            <div class="upload-card">
+                <h2>Upload Image for Analysis</h2>
+                <p>Take a photo of affected leaves, fruits, or vegetables and get instant diagnosis</p>
+                
+                <div class="upload-area" id="uploadArea">
+                    <div class="upload-icon">📸</div>
+                    <h3>Drag & Drop Image Here</h3>
+                    <p>or click to browse</p>
+                    <input type="file" id="fileInput" accept="image/*" style="display: none;">
+                    <button class="btn btn-primary" onclick="document.getElementById('fileInput').click()">
+                        Choose Image
+                    </button>
+                </div>
+
+                <div id="previewSection" style="display: none;">
+                    <h3>Image Preview</h3>
+                    <img id="imagePreview" style="max-width: 100%; border-radius: 15px; margin: 20px 0;">
+                    <button class="btn btn-primary" id="analyzeBtn">🔍 Analyze Image</button>
+                    <button class="btn btn-secondary" id="resetBtn">↺ Upload Another</button>
+                </div>
+
+                <div id="resultsSection" style="display: none;">
+                    <h3>Detection Results</h3>
+                    <div id="detectionResults"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="disease-how-it-works">
+        <div class="container">
+            <h2 class="section-title">How Disease Detection Works</h2>
+            <p class="section-subtitle">Advanced computer vision powered by deep learning</p>
+
+            <div class="detection-process">
+                <div class="process-step">
+                    <div class="process-number">1</div>
+                    <div class="process-content">
+                        <h3>Image Capture</h3>
+                        <p>Take a clear photo of the affected plant part (leaf, fruit, or stem) using your smartphone or camera. Ensure good lighting and focus on the diseased area.</p>
+                        <div class="process-tips">
+                            <strong>Tips:</strong>
+                            <ul>
+                                <li>✓ Use natural lighting</li>
+                                <li>✓ Fill the frame with the affected area</li>
+                                <li>✓ Keep camera steady and focused</li>
+                                <li>✓ Avoid shadows and glare</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="process-step">
+                    <div class="process-number">2</div>
+                    <div class="process-content">
+                        <h3>Image Preprocessing</h3>
+                        <p>The AI system automatically preprocesses your image by resizing, normalizing pixel values, and enhancing features relevant to disease identification.</p>
+                        <div class="process-tech">
+                            <span class="tech-badge-small">Image Normalization</span>
+                            <span class="tech-badge-small">Feature Enhancement</span>
+                            <span class="tech-badge-small">Background Removal</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="process-step">
+                    <div class="process-number">3</div>
+                    <div class="process-content">
+                        <h3>CNN Analysis</h3>
+                        <p>A Convolutional Neural Network (CNN) trained on thousands of plant disease images analyzes patterns, colors, spots, and textures to identify the disease.</p>
+                        <div class="process-tech">
+                            <span class="tech-badge-small">Deep Learning</span>
+                            <span class="tech-badge-small">Pattern Recognition</span>
+                            <span class="tech-badge-small">Multi-class Classification</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="process-step">
+                    <div class="process-number">4</div>
+                    <div class="process-content">
+                        <h3>Disease Identification</h3>
+                        <p>The system provides the disease name, confidence score, severity level, treatment recommendations, and preventive measures.</p>
+                        <div class="process-tech">
+                            <span class="tech-badge-small">95%+ Accuracy</span>
+                            <span class="tech-badge-small">40+ Diseases</span>
+                            <span class="tech-badge-small">Instant Results</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Detectable Diseases -->
+    <section class="detectable-diseases">
+        <div class="container">
+            <h2 class="section-title">Detectable Diseases</h2>
+            <p class="section-subtitle">Our AI can identify 40+ common crop, fruit, and vegetable diseases</p>
+
+            <div class="disease-categories">
+                <div class="disease-category">
+                    <h3>🌿 Leaf Diseases</h3>
+                    <div class="disease-grid">
+                        <div class="disease-item">
+                            <div class="disease-icon">🍃</div>
+                            <strong>Late Blight</strong>
+                            <span>Tomato, Potato</span>
+                        </div>
+                        <div class="disease-item">
+                            <div class="disease-icon">🍂</div>
+                            <strong>Early Blight</strong>
+                            <span>Tomato, Potato</span>
+                        </div>
+                        <div class="disease-item">
+                            <div class="disease-icon">🌱</div>
+                            <strong>Leaf Spot</strong>
+                            <span>Multiple crops</span>
+                        </div>
+                        <div class="disease-item">
+                            <div class="disease-icon">🍃</div>
+                            <strong>Powdery Mildew</strong>
+                            <span>Grapes, Cucumber</span>
+                        </div>
+                        <div class="disease-item">
+                            <div class="disease-icon">🍂</div>
+                            <strong>Leaf Rust</strong>
+                            <span>Wheat, Corn</span>
+                        </div>
+                        <div class="disease-item">
+                            <div class="disease-icon">🌿</div>
+                            <strong>Downy Mildew</strong>
+                            <span>Grapes, Lettuce</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="disease-category">
+                    <h3>🍎 Fruit Diseases</h3>
+                    <div class="disease-grid">
+                        <div class="disease-item">
+                            <div class="disease-icon">🍏</div>
+                            <strong>Apple Scab</strong>
+                            <span>Apple</span>
+                        </div>
+                        <div class="disease-item">
+                            <div class="disease-icon">🍇</div>
+                            <strong>Black Rot</strong>
+                            <span>Grapes, Apple</span>
+                        </div>
+                        <div class="disease-item">
+                            <div class="disease-icon">🍑</div>
+                            <strong>Brown Rot</strong>
+                            <span>Stone fruits</span>
+                        </div>
+                        <div class="disease-item">
+                            <div class="disease-icon">🍊</div>
+                            <strong>Citrus Canker</strong>
+                            <span>Citrus fruits</span>
+                        </div>
+                        <div class="disease-item">
+                            <div class="disease-icon">🍓</div>
+                            <strong>Anthracnose</strong>
+                            <span>Strawberry, Mango</span>
+                        </div>
+                        <div class="disease-item">
+                            <div class="disease-icon">🍅</div>
+                            <strong>Bacterial Spot</strong>
+                            <span>Tomato, Pepper</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="disease-category">
+                    <h3>🥕 Vegetable Diseases</h3>
+                    <div class="disease-grid">
+                        <div class="disease-item">
+                            <div class="disease-icon">🥔</div>
+                            <strong>Potato Blight</strong>
+                            <span>Potato</span>
+                        </div>
+                        <div class="disease-item">
+                            <div class="disease-icon">🥒</div>
+                            <strong>Mosaic Virus</strong>
+                            <span>Cucumber, Squash</span>
+                        </div>
+                        <div class="disease-item">
+                            <div class="disease-icon">🌶️</div>
+                            <strong>Pepper Spot</strong>
+                            <span>Bell Pepper</span>
+                        </div>
+                        <div class="disease-item">
+                            <div class="disease-icon">🥬</div>
+                            <strong>Clubroot</strong>
+                            <span>Cabbage, Broccoli</span>
+                        </div>
+                        <div class="disease-item">
+                            <div class="disease-icon">🧅</div>
+                            <strong>Onion Rot</strong>
+                            <span>Onion, Garlic</span>
+                        </div>
+                        <div class="disease-item">
+                            <div class="disease-icon">🥕</div>
+                            <strong>Carrot Fly</strong>
+                            <span>Carrot, Parsnip</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="disease-category">
+                    <h3>🌾 Cereal Diseases</h3>
+                    <div class="disease-grid">
+                        <div class="disease-item">
+                            <div class="disease-icon">🌾</div>
+                            <strong>Wheat Rust</strong>
+                            <span>Wheat</span>
+                        </div>
+                        <div class="disease-item">
+                            <div class="disease-icon">🌽</div>
+                            <strong>Corn Smut</strong>
+                            <span>Corn</span>
+                        </div>
+                        <div class="disease-item">
+                            <div class="disease-icon">🌾</div>
+                            <strong>Rice Blast</strong>
+                            <span>Rice</span>
+                        </div>
+                        <div class="disease-item">
+                            <div class="disease-icon">🌾</div>
+                            <strong>Barley Mildew</strong>
+                            <span>Barley</span>
+                        </div>
+                        <div class="disease-item">
+                            <div class="disease-icon">🌽</div>
+                            <strong>Corn Blight</strong>
+                            <span>Corn</span>
+                        </div>
+                        <div class="disease-item">
+                            <div class="disease-icon">🌾</div>
+                            <strong>Fusarium Head Blight</strong>
+                            <span>Wheat, Barley</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technology Stack -->
+    <section class="disease-technology">
+        <div class="container">
+            <h2 class="section-title">Technology Behind Detection</h2>
+            
+            <div class="tech-stack-disease">
+                <div class="tech-layer">
+                    <h3>Deep Learning Architecture</h3>
+                    <div class="tech-details-grid">
+                        <div class="tech-detail-item">
+                            <strong>Model:</strong>
+                            <p>Convolutional Neural Network (CNN)</p>
+                        </div>
+                        <div class="tech-detail-item">
+                            <strong>Framework:</strong>
+                            <p>TensorFlow / PyTorch</p>
+                        </div>
+                        <div class="tech-detail-item">
+                            <strong>Architecture:</strong>
+                            <p>ResNet50 / MobileNetV2</p>
+                        </div>
+                        <div class="tech-detail-item">
+                            <strong>Training Data:</strong>
+                            <p>50,000+ labeled images</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tech-layer">
+                    <h3>Image Processing</h3>
+                    <div class="tech-details-grid">
+                        <div class="tech-detail-item">
+                            <strong>Libraries:</strong>
+                            <p>OpenCV, PIL, scikit-image</p>
+                        </div>
+                        <div class="tech-detail-item">
+                            <strong>Preprocessing:</strong>
+                            <p>Resize, normalize, augment</p>
+                        </div>
+                        <div class="tech-detail-item">
+                            <strong>Input Size:</strong>
+                            <p>224x224 or 299x299 pixels</p>
+                        </div>
+                        <div class="tech-detail-item">
+                            <strong>Color Space:</strong>
+                            <p>RGB (3 channels)</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tech-layer">
+                    <h3>Performance Metrics</h3>
+                    <div class="tech-details-grid">
+                        <div class="tech-detail-item">
+                            <strong>Accuracy:</strong>
+                            <p>95.7% on test dataset</p>
+                        </div>
+                        <div class="tech-detail-item">
+                            <strong>Inference Time:</strong>
+                            <p>&lt; 2 seconds per image</p>
+                        </div>
+                        <div class="tech-detail-item">
+                            <strong>Classes:</strong>
+                            <p>40+ disease categories</p>
+                        </div>
+                        <div class="tech-detail-item">
+                            <strong>F1-Score:</strong>
+                            <p>0.94 (macro average)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Integration Options -->
+    <section class="integration-options">
+        <div class="container">
+            <h2 class="section-title">Integration Methods</h2>
+            <p class="section-subtitle">Multiple ways to use disease detection in your workflow</p>
+
+            <div class="integration-grid">
+                <div class="integration-card">
+                    <div class="integration-icon">📱</div>
+                    <h3>Mobile App</h3>
+                    <p>Take photos directly with your smartphone and get instant diagnosis in the field</p>
+                    <ul>
+                        <li>Offline mode available</li>
+                        <li>GPS location tagging</li>
+                        <li>History tracking</li>
+                    </ul>
+                </div>
+
+                <div class="integration-card">
+                    <div class="integration-icon">🌐</div>
+                    <h3>Web Interface</h3>
+                    <p>Upload images through our web dashboard from any device with a browser</p>
+                    <ul>
+                        <li>Batch processing</li>
+                        <li>Export reports (PDF)</li>
+                        <li>Cloud storage</li>
+                    </ul>
+                </div>
+
+                <div class="integration-card">
+                    <div class="integration-icon">🔌</div>
+                    <h3>REST API</h3>
+                    <p>Integrate disease detection into your own applications via our API endpoints</p>
+                    <ul>
+                        <li>JSON response format</li>
+                        <li>Rate limiting: 1000/day</li>
+                        <li>API documentation</li>
+                    </ul>
+                </div>
+
+                <div class="integration-card">
+                    <div class="integration-icon">📷</div>
+                    <h3>Automated Cameras</h3>
+                    <p>Install smart cameras in fields for continuous monitoring and early detection</p>
+                    <ul>
+                        <li>24/7 surveillance</li>
+                        <li>Automatic alerts</li>
+                        <li>Time-lapse analysis</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits -->
+    <section class="disease-benefits">
+        <div class="container">
+            <h2 class="section-title">Benefits of AI Disease Detection</h2>
+
+            <div class="benefits-grid">
+                <div class="benefit-card">
+                    <div class="benefit-icon">⚡</div>
+                    <h3>Fast Diagnosis</h3>
+                    <p>Get results in seconds instead of waiting days for lab analysis</p>
+                </div>
+
+                <div class="benefit-card">
+                    <div class="benefit-icon">🎯</div>
+                    <h3>High Accuracy</h3>
+                    <p>95%+ accuracy trained on thousands of disease images</p>
+                </div>
+
+                <div class="benefit-card">
+                    <div class="benefit-icon">💰</div>
+                    <h3>Cost Effective</h3>
+                    <p>Reduce crop loss by early detection and targeted treatment</p>
+                </div>
+
+                <div class="benefit-card">
+                    <div class="benefit-icon">🌍</div>
+                    <h3>Accessible Anywhere</h3>
+                    <p>No internet required with offline mobile app mode</p>
+                </div>
+
+                <div class="benefit-card">
+                    <div class="benefit-icon">📚</div>
+                    <h3>Treatment Guidance</h3>
+                    <p>Receive specific treatment recommendations for each disease</p>
+                </div>
+
+                <div class="benefit-card">
+                    <div class="benefit-icon">📊</div>
+                    <h3>Track History</h3>
+                    <p>Monitor disease patterns and outbreaks over time</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta">
+        <div class="container">
+            <h2 class="cta-title">Start Detecting Diseases Today</h2>
+            <p class="cta-subtitle">Protect your crops with AI-powered early detection</p>
+            <div class="cta-buttons">
+                <a href="#uploadArea" class="btn btn-large btn-outline">
+                    <span>Upload Image Now</span>
+                    <span class="btn-icon">↑</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Smart Agriculture AI</h3>
+                    <p>Transforming farming with artificial intelligence and IoT technology.</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="dashboard.html">Dashboard</a></li>
+                        <li><a href="features.html">Features</a></li>
+                        <li><a href="about.html">About</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="#">Documentation</a></li>
+                        <li><a href="#">API Reference</a></li>
+                        <li><a href="#">Support</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Contact</h4>
+                    <ul>
+                        <li>📧 info@smartagri.ai</li>
+                        <li>🌐 www.smartagri.ai</li>
+                        <li>📱 +1 (555) 123-4567</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 Smart Agriculture AI System. Built with ❤️ for sustainable farming.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="disease-detection.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
