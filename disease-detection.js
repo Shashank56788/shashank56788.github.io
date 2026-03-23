@@ -1,6 +1,6 @@
 /**
  * Disease Detection JavaScript
- * Handles image upload, preview, and AI analysis
+ * Handles image upload, preview, and AI analysis via backend API
  */
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -13,69 +13,19 @@ document.addEventListener('DOMContentLoaded', function() {
     const resultsSection = document.getElementById('resultsSection');
     const detectionResults = document.getElementById('detectionResults');
 
-    // Sample disease database (in production, this would come from backend AI)
-    const diseaseDatabase = [
-        {
-            name: 'Late Blight',
-            crop: 'Tomato',
-            severity: 'High',
-            confidence: 0.94,
-            description: 'Fungal disease causing dark lesions on leaves and stems',
-            symptoms: ['Dark brown spots on leaves', 'White fuzzy growth', 'Rapid spreading', 'Affects fruits'],
-            treatment: [
-                'Remove and destroy infected plants immediately',
-                'Apply copper-based fungicide',
-                'Improve air circulation',
-                'Avoid overhead watering'
-            ],
-            prevention: [
-                'Use disease-resistant varieties',
-                'Practice crop rotation',
-                'Maintain proper spacing',
-                'Water at soil level'
-            ]
-        },
-        {
-            name: 'Powdery Mildew',
-            crop: 'Grape',
-            severity: 'Medium',
-            confidence: 0.91,
-            description: 'White powdery fungal growth on leaves and fruits',
-            symptoms: ['White powdery coating', 'Leaf curling', 'Stunted growth', 'Reduced yield'],
-            treatment: [
-                'Apply sulfur-based fungicide',
-                'Prune affected areas',
-                'Increase sunlight exposure',
-                'Use neem oil spray'
-            ],
-            prevention: [
-                'Plant in sunny locations',
-                'Ensure good air flow',
-                'Avoid over-fertilizing',
-                'Regular monitoring'
-            ]
-        },
-        {
-            name: 'Bacterial Spot',
-            crop: 'Pepper',
-            severity: 'High',
-            confidence: 0.88,
-            description: 'Bacterial infection causing dark spots on leaves and fruits',
-            symptoms: ['Small dark spots with yellow halo', 'Leaf drop', 'Fruit lesions', 'Defoliation'],
-            treatment: [
-                'Apply copper-based bactericide',
-                'Remove infected plant parts',
-                'Disinfect tools between cuts',
-                'Avoid working with wet plants'
-            ],
-            prevention: [
-                'Use certified disease-free seeds',
-                'Practice 2-3 year crop rotation',
-                'Mulch to prevent soil splash',
-                'Drip irrigation preferred'
-            ]
-        }
-    ];
+    console.log('Disease Detection initialized');
+    console.log('Elements found:', {
+        fileInput: !!fileInput,
+        uploadArea: !!uploadArea,
+        previewSection: !!previewSection,
+        imagePreview: !!imagePreview
+    });
+
+    // Click on upload area to trigger file input
+    uploadArea.addEventListener('click', function() {
+        console.log('Upload area clicked');
+        fileInput.click();
+    });
 
     // Drag and drop handlers
     uploadArea.addEventListener('dragover', function(e) {
@@ -95,50 +45,124 @@ document.addEventListener('DOMContentLoaded', function() {
         uploadArea.style.borderColor = '#e5e7eb';
         uploadArea.style.background = '#f9fafb';
         
+        console.log('File dropped');
         const files = e.dataTransfer.files;
         if (files.length > 0) {
+            console.log('File:', files[0].name, files[0].type);
             handleFileSelect(files[0]);
         }
     });
 
     // File input change
     fileInput.addEventListener('change', function(e) {
+        console.log('File input changed');
         if (e.target.files.length > 0) {
+            console.log('File selected:', e.target.files[0].name);
             handleFileSelect(e.target.files[0]);
         }
     });
 
     // Handle file selection
     function handleFileSelect(file) {
+        console.log('handleFileSelect called with:', file.name, file.type, file.size);
+        
         if (!file.type.match('image.*')) {
             alert('Please select an image file');
+            console.error('Invalid file type:', file.type);
             return;
         }
 
         const reader = new FileReader();
+        
         reader.onload = function(e) {
+            console.log('File loaded, data length:', e.target.result.length);
             imagePreview.src = e.target.result;
             uploadArea.style.display = 'none';
             previewSection.style.display = 'block';
             resultsSection.style.display = 'none';
+            console.log('Preview displayed');
         };
+        
+        reader.onerror = function(e) {
+            console.error('FileReader error:', e);
+            alert('Error reading file');
+        };
+        
         reader.readAsDataURL(file);
+        console.log('Reading file...');
     }
 
     // Analyze button
     analyzeBtn.addEventListener('click', function() {
         analyzeBtn.disabled = true;
-        analyzeBtn.innerHTML = '<span>🔄 Analyzing...</span>';
+        analyzeBtn.innerHTML = '<span>🔄 Analyzing with AI...</span>';
 
-        // Simulate AI processing delay
-        setTimeout(function() {
-            // Randomly select a disease from database (in production, this would be actual AI prediction)
-            const randomDisease = diseaseDatabase[Math.floor(Math.random() * diseaseDatabase.length)];
-            displayResults(randomDisease);
+        // Get image as base64
+        const imageBase64 = imagePreview.src;
+
+        // Send to backend API
+        fetch('http://localhost:5000/api/disease/detect', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                image: imageBase64
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success' && data.detection) {
+                displayResults(data.detection);
+            } else if (data.error) {
+                alert('Error: ' + data.error);
+                console.error('API Error:', data);
+            }
             
             analyzeBtn.disabled = false;
             analyzeBtn.innerHTML = '<span>🔍 Analyze Image</span>';
-        }, 2000);
+        })
+        .catch(error => {
+            console.error('Connection Error:', error);
+            
+            // Show backend connection error
+            alert('⚠️ Backend not connected.\n\nTo use disease detection:\n1. Run: python backend_server.py\n2. Make sure it\'s running on http://localhost:5000\n3. Try uploading the image again');
+            
+            // Show error in results section
+            detectionResults.innerHTML = `
+                <div class="result-card" style="background: #fee2e2; border: 2px solid #ef4444;">
+                    <div class="result-header">
+                        <h3 style="color: #ef4444;">⚠️ Backend Not Connected</h3>
+                    </div>
+                    <div class="result-description">
+                        <p style="color: #991b1b; font-size: 1.0625rem; line-height: 1.8;">
+                            The disease detection AI backend is not running. To use this feature:
+                        </p>
+                        <ol style="color: #991b1b; margin-top: 1rem; line-height: 1.8;">
+                            <li>Open a terminal/command prompt</li>
+                            <li>Navigate to your project folder</li>
+                            <li>Run: <code style="background: white; padding: 0.25rem 0.5rem; border-radius: 4px;">python backend_server.py</code></li>
+                            <li>Wait for "System ready!" message</li>
+                            <li>Upload your image again</li>
+                        </ol>
+                        <div style="margin-top: 1.5rem; padding: 1rem; background: white; border-radius: 8px;">
+                            <strong style="color: #0f172a;">Backend URL:</strong> 
+                            <code>http://localhost:5000/api/disease/detect</code>
+                        </div>
+                    </div>
+                </div>
+            `;
+            resultsSection.style.display = 'block';
+            
+            analyzeBtn.disabled = false;
+            analyzeBtn.innerHTML = '<span>🔍 Analyze Image</span>';
+        });
+    });
+            displayResults(demoDisease);
+            
+            analyzeBtn.disabled = false;
+            analyzeBtn.innerHTML = '<span>🔍 Analyze Image</span>';
+        });
     });
 
     // Reset button
