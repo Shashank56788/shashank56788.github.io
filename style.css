@@ -448,7 +448,7 @@ section {
 }
 
 .upload-card {
-    max-width: 800px;
+    max-width: 900px;
     margin: 0 auto;
     background: white;
     padding: 3rem;
@@ -477,16 +477,54 @@ section {
     background: #f9fafb;
     transition: all var(--transition-base);
     cursor: pointer;
+    min-height: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    user-select: none;
+}
+
+.upload-area::before {
+    content: '👆 Click anywhere in this box';
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 0.8rem;
+    color: #10b981;
+    background: rgba(16, 185, 129, 0.1);
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-md);
+    font-weight: 600;
 }
 
 .upload-area:hover {
-    border-color: var(--primary-color);
-    background: rgba(102, 126, 234, 0.05);
+    border-color: #10b981;
+    background: rgba(16, 185, 129, 0.05);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+}
+
+.upload-area:active {
+    transform: translateY(0);
+}
+
+.upload-area.dragover {
+    border-color: #10b981;
+    background: rgba(16, 185, 129, 0.1);
+    transform: scale(1.02);
 }
 
 .upload-icon {
     font-size: 4rem;
     margin-bottom: 1rem;
+    animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
 }
 
 .upload-area h3 {
@@ -498,6 +536,36 @@ section {
 .upload-area p {
     color: var(--text-secondary);
     margin-bottom: 1.5rem;
+}
+
+.upload-area .btn {
+    pointer-events: none;
+    margin-top: 1rem;
+}
+
+#previewSection {
+    text-align: center;
+}
+
+#previewSection h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+}
+
+#imagePreview {
+    max-width: 100%;
+    max-height: 500px;
+    border-radius: 15px;
+    margin: 20px 0;
+    box-shadow: var(--shadow-lg);
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#previewSection .btn {
+    margin: 0.5rem;
 }
 
 /* Results Section */
@@ -909,6 +977,29 @@ section {
         padding: 2rem 1.5rem;
     }
 
+    .upload-area {
+        padding: 3rem 1.5rem;
+        min-height: 250px;
+    }
+
+    .upload-area h3 {
+        font-size: 1.25rem;
+    }
+
+    .upload-icon {
+        font-size: 3rem;
+    }
+
+    #imagePreview {
+        max-height: 300px;
+    }
+
+    #previewSection .btn {
+        display: block;
+        width: 100%;
+        margin: 0.5rem 0;
+    }
+
     .process-step {
         grid-template-columns: 1fr;
     }
@@ -923,6 +1014,11 @@ section {
 
     .result-actions {
         flex-direction: column;
+    }
+
+    .result-actions .btn {
+        width: 100%;
+        margin: 0.5rem 0;
     }
 
     .disease-grid {
