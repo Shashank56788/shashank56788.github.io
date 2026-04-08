@@ -539,7 +539,7 @@ section {
 }
 
 .upload-area .btn {
-    pointer-events: none;
+    pointer-events: auto;
     margin-top: 1rem;
 }
 
